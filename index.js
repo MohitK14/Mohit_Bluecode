@@ -1,3 +1,4 @@
+require('express-async-errors')
 const config = require('config');
 const Joi = require('joi');
 const express = require('express');
@@ -6,13 +7,16 @@ const mongoose = require('mongoose');
 const signup = require('./routes/signup');
 const login = require('./routes/login');
 const resetPassword = require('./routes/resetPassword');
-const cors = require('cors'); 
+const cors = require('cors');
+const error = require('./middleware/error') 
 
 app.use(cors());
 app.use(express.json());
 app.use('/api/users', signup);
 app.use('/api/users', login);
 app.use('/api/users', resetPassword)
+
+app.use(error);
 
 if(!config.get('jwtPrivateKey')){
     console.error('FATAL ERROR: jwtPrivateKey does not exist');
